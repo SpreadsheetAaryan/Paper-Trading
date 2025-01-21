@@ -113,12 +113,5 @@ pip install -r requirements.txt
 
 ---
 
-### Future Enhancements
-1. Add real-time stock price updates using WebSocket or similar technologies.
-2. Improve prediction accuracy by training the LSTM model on additional features like trading volume or technical indicators.
-3. Enhance UI design with modern frameworks like Bootstrap or React.
-
----
-
 ### License
 This project is licensed under [MIT License].
