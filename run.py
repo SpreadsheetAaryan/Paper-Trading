@@ -27,9 +27,11 @@ Session(app)
 
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
+if not os.environ.get("NEWS_API_KEY"):
+    raise RuntimeError("NEWS_API_KEY not set")
 
 DATABASE = 'stock_data.db'
-NEWS_API_KEY = '072d6c477a3549deb2335bbc37debef7'
+NEWS_API_KEY = os.environ.get("NEWS_API_KEY")
 
 def get_db():
     if 'db' not in g:
