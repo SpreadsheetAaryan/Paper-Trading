@@ -1,6 +1,10 @@
 # README.txt
 
-## Project Title: Stock Trading and Prediction Platform
+## Project Demo: https://youtu.be/zd0G3uwaul4?si=89-RomV_qXvx4VIf
+
+---
+
+## Paper Trading Application
 
 ### Description
 This project is a **web-based stock trading and prediction platform** built using Flask. It combines stock market data retrieval, AI-powered stock price predictions, and a user-friendly interface for portfolio management. Users can:
