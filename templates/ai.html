@@ -1,0 +1,266 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Stock AI
+{% endblock %}
+
+{% block css %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(255, 255, 255, .2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgb(12,9,121);
+            background: linear-gradient(90deg, rgba(12,9,121,1) 36%, rgba(130,11,184,1) 91%);
+        }
+        .wrapper {
+            position: relative;
+            width: 400px;
+            height: 500px;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .form-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            transition: 1s ease-in-out;
+        }
+
+        .wrapper.active .form-wrapper.sign-in {
+            transform: scale(0) translate(-300px, 500px);
+        }
+
+        .wrapper .form-wrapper.sign-up {
+            position: absolute;
+            top: 0;
+            transform: scale(0) translate(200px, -500px);
+        }
+
+        .wrapper.active .form-wrapper.sign-up {
+            transform: scale(1) translate(0, 0);
+        }
+
+        h2 {
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+        }
+
+        p {
+            color: #fff;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 30px 0;
+            border-bottom: 2px solid #fff;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;     
+            transition: .5s;   
+        }
+
+        .input-group input {
+            width: 320px;
+            height: 40px;
+            font-size: 16px;
+            color: #fff;
+            padding: 0 5px;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: -5px;
+        }
+
+        .remember {
+            margin: -5px 0 15px 5px;
+        }
+
+        .remember label {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .remember label input {
+            accent-color: #0c0979;
+        }
+
+        button {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+        }
+
+        .signUp-link {
+            font-size: 14px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .signUp-link p {
+            color: #fff;
+        }
+
+        .signUp-link p a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signUp-link p a:hover {
+            text-decoration: underline;
+        }
+
+        .prediction-card {
+            position: relative;
+            width: 90%;
+            max-width: 300px;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin: 20px auto;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        @media (min-width: 768px) {
+            .prediction-card {
+                position: absolute;
+                right: 100px;
+                top: 200px;
+                width: 300px;
+                margin: 0;
+            }
+        }
+
+        .bu {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .bu:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    {% block navbar %}
+
+    {% endblock %}
+
+    <div class="container">
+
+    <div class="wrapper">
+
+        <div class="form-wrapper sign-in">
+            <form action="{{ url_for('predict_stock') }}" method="post">
+                <h2>Stock AI</h2>
+                <p class="text-center">Enter a stock symbol to get a prediction for tomorrow's price.</p>
+                <div class="input-group">
+                    <input type="text" required name="symbol" id="symbol">
+                    <label for="">Symbol</label>
+                </div> 
+                <button type="submit">Get Prediction</button>
+                <div class="signUp-link">
+                    <p><a href="/" class="signUpBtn-link">Go Back</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    {% if prediction %}
+        <div class="prediction-card text-center">
+            <p><strong>Stock Symbol:</strong> {{ symbol }}</p>
+            <p><strong>Predicted Price:</strong> ${{ prediction }}</p>
+            <a href="/ai" class="bu">New Prediction</a>
+        </div>
+    {% endif %}
+
+    </div>
+
+{% endblock %}

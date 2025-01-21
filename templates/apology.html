@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Apology
+{% endblock %}
+
+{% block css %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgb(12,9,121);
+            background: linear-gradient(90deg, rgba(12,9,121,1) 36%, rgba(130,11,184,1) 91%);
+            padding-top: 56px; /* Adjust for navbar height */
+        }
+
+        .wrapper {
+            position: relative;
+            width: 400px;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            animation: fadeIn 1s ease-in-out;
+            text-align: center;
+        }
+
+        h2 {
+            font-size: 24px;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        p {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+    <div class="wrapper">
+        <h2>Sorry!</h2>
+        <p>{{ message }}</p>
+    </div>
+{% endblock %}

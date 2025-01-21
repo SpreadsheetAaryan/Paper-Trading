@@ -1,0 +1,389 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Search
+{% endblock %}
+
+{% block css %}
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgb(12,9,121);
+            background: linear-gradient(90deg, rgba(12,9,121,1) 36%, rgba(130,11,184,1) 91%);
+        }
+
+        .con {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .wrapper {
+            position: relative;
+            width: 300px;
+            height: 350px;
+            background: rgba(255, 255, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .form-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            transition: 1s ease-in-out;
+        }
+
+        .wrapper.active .form-wrapper.sign-in {
+            transform: scale(0) translate(-300px, 500px);
+        }
+
+        .wrapper .form-wrapper.sign-up {
+            position: absolute;
+            top: 0;
+            transform: scale(0) translate(200px, -500px);
+        }
+
+        .wrapper.active .form-wrapper.sign-up {
+            transform: scale(1) translate(0, 0);
+        }
+
+        h2 {
+            font-size: 30px;
+            color: #fff;
+            text-align: center;
+        }
+
+        p {
+            color: #fff;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 30px 0;
+            border-bottom: 2px solid #fff;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;     
+            transition: .5s;   
+        }
+
+        .input-group input {
+            width: 220px;
+            height: 40px;
+            font-size: 16px;
+            color: #fff;
+            padding: 0 5px;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: -5px;
+        }
+
+        .bu {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .bu:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        button {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+        }
+
+        button:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        #g {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: rgba(75, 192, 192, 1);
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+        }
+
+        #g:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        #r {
+            position: relative;
+            width: 100%;
+            height: 40px;
+            background: rgba(192, 75, 192, 1);
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+        }
+
+        #r:hover {
+            color: #0c0979;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+
+        .signUp-link {
+            font-size: 14px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .signUp-link p {
+            color: #fff;
+        }
+
+        .signUp-link p a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signUp-link p a:hover {
+            text-decoration: underline;
+        }
+
+        .btn-success, .btn-danger {
+            border-radius: 0;
+            transition: background-color 0.3s ease, transform 0.3s ease;
+        }
+        .btn-success:hover, .btn-danger:hover {
+            transform: scale(1.05);
+        }
+        .table {
+            margin-top: 20px;
+            width: 100%;
+            color: #fff;
+        }
+
+        .table-responsive {
+            overflow-x: auto; /* Enable horizontal scroll for smaller screens */
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 10px;
+            border-bottom: 1px solid #fff;
+        }
+
+        .table th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .table td a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .table td a:hover {
+            color: #0056b3;
+        }
+
+        .prediction-card {
+            width: 750px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .conb {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+        }
+
+        #stockChart {
+            background: rgba(255, 255, 255, .2);
+            margin-top: 30px;
+            animation: fadeIn 1s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <div class="con">
+    <div class="wrapper">
+        <div class="form-wrapper sign-in">
+            <form action="{{ url_for('search') }}" method="post">
+                <h2>Stock Search</h2>
+                <p class="text-center">Enter a stock symbol to get a quote</p>
+                <div class="input-group">
+                    <input type="text" required name="symbol" id="symbol">
+                    <label for="">Symbol</label>
+                </div> 
+                <button type="submit">Get Quote</button>
+                <div class="signUp-link">
+                    <p><a href="/" class="signUpBtn-link">Go Back</a></p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div class="prediction-card">
+    {% if symbol %}
+
+        <div class="table-responsive mt-4">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>{{ symbol }}</td>
+                        <td>{{ name }}</td>
+                        <td>{{ usd(price) }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div id="stockChart"></div>
+
+        <div class="conb">
+            <div class="form-wrapper sign-in">
+                <form action="{{ url_for('buy') }}" method="post">
+                    <div class="input-group">
+                        <input type="text" required name="shares" id="shares" autofocus>
+                        <label for="">Shares</label>
+                    </div> 
+                    <input type="hidden" name="symbol" value="{{ symbol }}">
+                    <button type="submit" id="g">Buy</button>
+                </form>
+            </div>
+    
+            <div class="form-wrapper sign-in">
+                <form action="{{ url_for('sell') }}" method="post">
+                    <div class="input-group">
+                        <input type="text" required name="shares" id="shares" autofocus>
+                        <label for="">Shares</label>
+                    </div> 
+                    <input type="hidden" name="symbol" value="{{ symbol }}">
+                    <button type="submit" id="r">Sell</button>
+                </form>
+            </div>
+        </div>
+
+        {% if dates and prices %}
+        <script>
+            var dates = {{ dates|tojson|safe }};
+            var prices = {{ prices|tojson|safe }};
+            
+            var trace = {
+                x: dates,
+                y: prices,
+                type: 'scatter',
+                mode: 'lines',
+                name: 'Stock Price',
+                line: {color: 'rgba(75, 192, 192, 1)'}
+            };
+    
+            var data = [trace];
+    
+            var layout = {
+                title: 'Stock Price History',
+                xaxis: {
+                    title: 'Date',
+                    type: 'date'
+                },
+                yaxis: {
+                    title: 'Price',
+                    autorange: true
+                },
+                plot_bgcolor: 'rgba(255, 255, 255, 0.1)', /* Adjusted transparency */
+                paper_bgcolor: 'rgba(255, 255, 255, 0.1)',
+                font: {
+                    color: '#fff'
+                }
+            };
+    
+            Plotly.newPlot('stockChart', data, layout);
+        </script>
+        {% endif %}
+    {% endif %}
+    </div>
+    </div>
+    
+    
+{% endblock %}
+
+

@@ -1,0 +1,127 @@
+{% extends "layout.html" %}
+
+{% block title %}Stock News{% endblock %}
+
+{% block css %}
+
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Poppins', sans-serif;
+    }
+
+    body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        background: rgb(12,9,121);
+        background: linear-gradient(90deg, rgba(12,9,121,1) 36%, rgba(130,11,184,1) 91%);
+    }
+
+    .wrapper {
+        position: relative;
+        width: 1110px;
+        background: rgba(255, 255, 255, .2);
+        border-radius: 20px;
+        box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+        padding: 40px;
+        color: #fff;
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .bu {
+        display: inline-block;
+        padding: 10px 20px;
+        background-color: #0c0979;
+        color: #fff;
+        text-decoration: none;
+        border-radius: 30px;
+        text-align: center;
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .bu:hover {
+        text-decoration: none;
+        color: #fff;
+        transform: scale(1.05);
+    }
+
+    .table {
+        margin-top: 20px;
+        width: 100%;
+    }
+
+    .table tr {
+        background-color: rgba(255, 255, 255, .1);
+    }
+
+    .table th,
+    .table td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    .table-responsive {
+        overflow-x: auto; /* Enable horizontal scroll for smaller screens */
+    }
+
+    .news-article {
+        padding: 20px;
+        margin-bottom: 30px;
+        border-radius: 8px;
+        background-color: rgba(255,255,255,.2);
+        box-shadow: 0 0 10px rgba(0,0,0,.1);
+    }
+
+    .news-article h3 {
+        font-size: 20px;
+        margin-top: 10px;
+    }
+
+    .news-article p {
+        margin-top: 10px;
+    }
+
+    .news-article a {
+        margin-top: 10px;
+        color: #007bff;
+    }
+
+</style>
+
+{% endblock %}
+
+{% block body %}
+
+    <div class="wrapper">
+        <h1>Latest Stock News</h1>
+
+        <div class="text-center mt-4">
+            <a type="button" href="/" class="bu">Go Back</a>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table text-center">
+                <tbody>
+                    {% for article in articles %}
+                    <tr class="news-article">
+                        <a href="{{ article.url }}" target="_blank"><h3>{{ article.title }}</h3></a>
+                        <p>{{ article.description }}</p>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+{% endblock %}

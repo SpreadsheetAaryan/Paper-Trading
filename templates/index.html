@@ -1,0 +1,374 @@
+{% extends "layout.html" %}
+
+{% block title %}Stock Analysis{% endblock %}
+
+{% block navbar %}{% endblock %}
+
+{% block css %}
+    <style>
+
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: rgb(12,9,121);
+            background: linear-gradient(90deg, rgba(12,9,121,1) 36%, rgba(130,11,184,1) 91%);
+        }
+
+        .navbar {
+            width: 100%;
+            background: rgba(255, 255, 255, .2);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            color: #ffffff !important;
+        }
+
+        .navbar-nav .nav-link {
+            color: #ffffff !important;
+            transition: color 0.3s ease;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #007bff !important;
+        }
+
+        .navbar-toggler {
+            border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar-toggler-icon {
+            background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%28255, 255, 255, 0.5%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+        }
+
+        .wrapper {
+            position: relative;
+            width: calc(100% - 40px); /* Adjust for smaller screens */
+            max-width: 800px; /* Maintain max width */
+            background: rgba(255, 255, 255, .2);
+            border-radius: 20px;
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.1);
+            padding: clamp(20px, 5vw, 40px);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .form-wrapper {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            transition: 1s ease-in-out;
+        }
+
+        h2 {
+            font-size: clamp(20px, 5vw, 30px); 
+            color: #fff;
+            text-align: center;
+        }
+
+        .input-group {
+            position: relative;
+            margin: 30px 0;
+            border-bottom: 2px solid #fff;
+        }
+
+        .input-group label {
+            position: absolute;
+            top: 50%;
+            left: 5px;
+            transform: translateY(-50%);
+            font-size: 16px;
+            color: #fff;
+            pointer-events: none;     
+            transition: .5s;   
+        }
+
+        .input-group input {
+            width: calc(100% - 10px);
+            height: 40px;
+            font-size: 16px;
+            color: #fff;
+            padding: 0 5px;
+            background: transparent;
+            border: none;
+            outline: none;
+        }
+
+        .input-group input:focus~label,
+        .input-group input:valid~label {
+            top: -5px;
+        }
+
+        .remember {
+            margin: -5px 0 15px 5px;
+        }
+
+        .remember label {
+            color: #fff;
+            font-size: 14px;
+        }
+
+        .remember label input {
+            accent-color: #0c0979;
+        }
+
+        button {
+            position: relative;
+            width: calc(100% - 20px);
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+        }
+
+        .bu {
+            position: relative;
+            width: calc(100% - 20px);
+            height: 40px;
+            background: #0c0979;
+            font-size: 16px;
+            color: #fff;
+            cursor: pointer;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-decoration: none;
+        }
+
+        .bu:hover {
+            color: #fff;
+            text-decoration: none;
+            transform: scale(1.05);
+        }
+
+        .signUp-link {
+            font-size: 14px;
+            text-align: center;
+            margin: 15px 0;
+        }
+
+        .signUp-link p {
+            color: #fff;
+        }
+
+        .signUp-link p a {
+            color: #fff;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .signUp-link p a:hover {
+            text-decoration: underline;
+        }
+
+        .table-responsive {
+            overflow-x: auto; /* Enable horizontal scroll for smaller screens */
+        }
+
+        .table {
+            margin-top: 20px;
+            width: 100%;
+            color: #fff;
+        }
+
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 10px;
+            border-bottom: 1px solid #fff;
+        }
+
+        .table th {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .table td a {
+            color: #007bff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .table td a:hover {
+            color: #0056b3;
+        }
+
+        .cash-value, .total-value {
+            animation: fadeIn 1s ease-in-out;
+            color: #fff;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                flex-direction: column; /* Stack content vertically on smaller screens */
+                align-items: stretch; /* Stretch content to fit screen width */
+                padding-top : calc (5%);
+            }
+
+            .wrapper {
+                width: calc(100% - 20px); /* Adjust for smaller screens */
+                padding: clamp(20px, 5vw, 40px);
+            }
+
+            .form-wrapper {
+                flex-direction: column; /* Stack form elements vertically on smaller screens */
+            }
+
+            .input-group {
+                margin: 20px 0; /* Adjust margin for smaller screens */
+            }
+
+            .input-group input {
+                width: calc(100% - 10px);
+            }
+
+            button {
+                width: calc(100% - 20px);
+            }
+
+            .bu {
+                width: calc(100% - 20px);
+            }
+
+            .table {
+                margin-top: 20px;
+                width: 100%;
+            }
+
+            .table th, .table td {
+                padding: 10px;
+            }
+
+            .cash-value, .total-value {
+                margin-top: 20px;
+            }
+
+            .navbar {
+                padding: 0 20px;
+            }
+
+            .navbar-brand {
+                font-size: 20px;
+            }
+
+            .navbar-nav .nav-link {
+                font-size: 16px;
+            }
+        }
+
+    </style>
+{% endblock %}
+
+{% block body %}
+
+    <nav class="navbar navbar-expand-lg navbar-dark">
+        <a class="navbar-brand" href="/">Stock Analysis</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="/search">Search</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/news">News</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/ai">Stock AI</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/history">History</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="/logout">Logout</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="wrapper">
+        <h2>Portfolio</h2>
+
+        <div class="text-center mt-4">
+            <a type="button" href="/search" class="bu">Search Stocks</a>
+        </div>
+
+        <div class="table-responsive mt-4">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Shares</th>
+                        <th>Current Price</th>
+                        <th>Total Investment</th>
+                        <th>Total Return</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for stock, price, total_val in zipped %}
+                    <tr>
+                        <td><a href="#" onclick="submitSymbol('{{ stock.symbol }}')">{{ stock.symbol }}</a></td>
+                        <td>{{ stock.name }}</td>
+                        <td>{{ stock.shares }}</td>
+                        <td>{{ price }}</td>
+                        <td>{{ usd(stock.price) }}</td>
+                        <td>{{ total_val }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="text-center mt-4">
+            <h3 class="cash-value">Cash: {{ cash }}</h3>
+            <h3 class="total-value">Total Value: {{ value }}</h3>
+        </div>
+    </div>
+
+    <script>
+        function submitSymbol(symbol) {
+            var form = document.createElement('form');
+            form.method = 'POST';
+            form.action = '/search';
+
+            var input = document.createElement('input');
+            input.type = 'hidden';
+            input.name = 'symbol';
+            input.value = symbol;
+
+            form.appendChild(input);
+            document.body.appendChild(form);
+            form.submit();
+        }
+    </script>
+{% endblock %}
