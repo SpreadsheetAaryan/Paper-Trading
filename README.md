@@ -40,7 +40,7 @@ pip install -r requirements.txt
 3. **Set Up Environment Variables**:
 Create a `.env` file in the root directory with the following content:
 API_KEY=<Your_Yahoo_Finance_API_Key>
-NEWS_API_KEY=072d6c477a3549deb2335bbc37debef7
+NEWS_API_KEY=<Your_News_API_Key>
 
 4. **Initialize the Database**:
 The database will be automatically created when you first run the application.
