@@ -1,0 +1,17 @@
+# Python
+__pycache__/
+*.py[cod]
+venv/
+.venv/
+
+# Local state created at runtime
+flask_session/
+*.db
+*.db-journal
+instance/
+
+# Secrets
+.env
+
+# OS
+.DS_Store
