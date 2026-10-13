@@ -1,121 +1,64 @@
-# README.txt
+# Paper Trading App
 
-## Project Demo: https://youtu.be/zd0G3uwaul4?si=89-RomV_qXvx4VIf
+A Flask web app for practicing stock trading with fake money. Users register, get $10,000 in virtual cash, and buy and sell real tickers at live Yahoo Finance prices. It also has a stock search page with a one-year price chart, a market news feed, and an experimental LSTM next-day price prediction.
 
----
+Demo video: https://youtu.be/zd0G3uwaul4
 
-## Paper Trading Application
+Built in January 2025 as an early learning project.
 
-### Description
-This project is a **web-based stock trading and prediction platform** built using Flask. It combines stock market data retrieval, AI-powered stock price predictions, and a user-friendly interface for portfolio management. Users can:
-- Buy and sell stocks while tracking their portfolio value.
-- Predict future stock prices using a pre-trained LSTM model.
-- View transaction history and access the latest financial news.
+## Features
 
-The AI component leverages an LSTM (Long Short-Term Memory) model for time-series forecasting, with `MinMaxScaler` used for data preprocessing.
+- Register, log in and log out (passwords stored as Werkzeug hashes, server-side sessions)
+- Buy and sell shares at the latest close from `yfinance`, with cash and holdings tracked in SQLite
+- Portfolio page with current price and gain or loss per holding
+- Paginated transaction history
+- Stock search with one year of closing prices
+- Market news from NewsAPI
+- LSTM price prediction (see below)
 
----
+## About the LSTM prediction
 
-### Features
-- **User Authentication**: Secure registration, login, and logout functionality.
-- **Stock Trading**: Buy and sell stocks with real-time price updates from Yahoo Finance.
-- **Portfolio Management**: Track your holdings, cash balance, and overall portfolio value.
-- **AI Stock Price Prediction**:
-  - Uses an LSTM model trained on historical stock data for future price forecasting.
-  - Preprocesses data using `MinMaxScaler` to normalize input features.
-  - Predicts future prices based on the last 60 days of stock closing prices.
-- **Historical Transactions**: View a paginated history of all buy/sell transactions.
-- **Financial News**: Fetches the latest stock market news using NewsAPI.
-- **Stock Search**: Look up historical price data for specific stocks over the past year.
+**This is a learning exercise, not a trading signal.** It was my first time building a time-series model, and it has not been backtested or evaluated against a baseline, so its output should not be used to make trading decisions.
 
----
+How it works (`run.py`, `StockPredictor`):
 
-### Installation and Setup
-Follow these steps to install and set up the application:
+1. Download two years of daily closing prices for the ticker with `yfinance`.
+2. Scale them to [0, 1] with `MinMaxScaler`.
+3. Feed the last 60 days into a Keras model: LSTM(50) -> Dropout(0.2) -> LSTM(50) -> Dropout(0.2) -> Dense(1).
+4. Inverse-scale the output to get a predicted next-day closing price.
 
-1. **Clone the Repository**:
-git clone <repository_url>
-cd <repository_directory>
+The weights are loaded from `stm.h5`. The data-preparation code is in `app/models/stock_model.py`, but the training run that produced the weights is not in this repo. Known limitations: the scaler is re-fit on each ticker at prediction time, and a single next-day point estimate says nothing about uncertainty.
 
-2. **Install Dependencies**:
-Ensure you have Python 3.x installed, then run:
+## Run it locally
+
+Requires Python 3.10 to 3.12 (for TensorFlow 2.16).
+
+```bash
+git clone https://github.com/SpreadsheetAaryan/Paper-Trading
+cd Paper-Trading
+python3 -m venv venv && source venv/bin/activate
 pip install -r requirements.txt
 
-3. **Set Up Environment Variables**:
-Create a `.env` file in the root directory with the following content:
-API_KEY=<Your_Yahoo_Finance_API_Key>
-NEWS_API_KEY=<Your_News_API_Key>
+export NEWS_API_KEY=your_newsapi_key   # free key from https://newsapi.org
+export API_KEY=anything                # checked at startup but not used; yfinance needs no key
 
-4. **Initialize the Database**:
-The database will be automatically created when you first run the application.
+python run.py
+```
 
+Open http://127.0.0.1:5555. The SQLite database (`stock_data.db`) and the `flask_session/` folder are created on first run and are not tracked in git.
 
-Access the application in your browser at `http://127.0.0.1:5555`.
+The app runs Flask's debug server on all interfaces, so only use it on a trusted local network.
 
----
+## Project layout
 
-### How the AI Works
-The AI component of this project uses an LSTM neural network model to predict future stock prices based on historical data. Below is an overview of how it works:
+```
+run.py                     the Flask app: routes, database setup, StockPredictor
+app/models/stock_model.py  data preparation for the LSTM (sequence building, scaling)
+stm.h5                     trained LSTM weights
+templates/                 Jinja templates
+requirements.txt
+```
 
-1. **Data Collection**:
-- Stock price data is retrieved using Yahoo Finance (`yfinance` library).
-- The last two years of closing prices are used for predictions.
+## Stack
 
-2. **Data Preprocessing**:
-- Prices are normalized to a range of [0, 1] using `MinMaxScaler` from Scikit-learn.
-- A sequence of the last 60 days' closing prices is prepared as input for the model.
-
-3. **LSTM Model Architecture**:
-- Two LSTM layers with 50 units each are used to capture temporal dependencies in stock prices.
-- Dropout layers are added for regularization to prevent overfitting.
-- A Dense layer outputs a single predicted price.
-
-4. **Prediction Process**:
-- The pre-trained model (`stm.h5`) is loaded at runtime.
-- The scaled input sequence is fed into the LSTM model to generate predictions.
-- The output is inverse-transformed back to the original scale using `MinMaxScaler`.
-
----
-
-### Folder Structure
-
-project/
-│
-├── templates/ # HTML templates for rendering views
-├── static/ # Static files (CSS, JS, images)
-├── app.py # Main Flask application file
-├── stm.h5 # Pre-trained LSTM model weights
-├── requirements.txt # Python dependencies
-├── .env # Environment variables file (not included in GitHub)
-└── README.txt # Project documentation (this file)
-
-
----
-
-### Dependencies
-The project requires the following Python libraries:
-- Flask (for web development)
-- Flask-Session (for session management)
-- SQLite (for database management)
-- TensorFlow (for building and running the LSTM model)
-- Scikit-learn (for data preprocessing with `MinMaxScaler`)
-- yfinance (for fetching stock market data)
-- requests (for API calls)
-
-Install all dependencies using:
-pip install -r requirements.txt
-
-
----
-
-### Usage Instructions
-1. Open your browser and navigate to `http://127.0.0.1:5555`.
-2. Register or log in to access features such as buying/selling stocks and viewing your portfolio.
-3. Use the `/predict` route to enter a stock symbol and view AI-generated predictions for its future price.
-4. Access financial news via `/news` or search for specific stocks using `/search`.
-5. Review your transaction history through `/history`.
-
----
-
-### License
-This project is licensed under [MIT License].
+Python, Flask, Flask-Session, SQLite, yfinance, NewsAPI, TensorFlow/Keras, scikit-learn, HTML/CSS (Jinja templates).
