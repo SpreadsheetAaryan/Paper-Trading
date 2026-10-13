@@ -4,7 +4,7 @@ A Flask web app for practicing stock trading with fake money. Users register, ge
 
 Demo video: https://youtu.be/zd0G3uwaul4
 
-Built in January 2025 as an early learning project.
+Built in January 2025 as an early learning project. The login, registration, `apology` page and `usd` helper follow the structure of the CS50x Finance problem set; the trading on live `yfinance` prices, news, search and LSTM pieces were added on top.
 
 ## Features
 
